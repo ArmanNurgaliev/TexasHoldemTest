@@ -1,7 +1,6 @@
-package test;
+package poker;
 
-import main.HandValue;
-import main.PokerHand;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -10,6 +9,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static poker.HandValue.*;
+import static poker.HandValue.ROYAL_FLUSH;
+import static poker.HandValue.STRAIGHT_FLUSH;
 
 class PokerHandTest {
     @Test
@@ -21,11 +23,19 @@ class PokerHandTest {
     }
 
     @Test
-    public void testInputCardWrong() {
+    public void testInputCardWrong1() {
         IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
                 () -> new PokerHand("JS 21S 5H 7S KS"));
 
         assertEquals("Wrong card: 21S", exception.getMessage());
+    }
+
+    @Test
+    public void testInputCardWrong2() {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class,
+                () -> new PokerHand("JS 2R 5H 7S KS"));
+
+        assertEquals("Wrong card: 2R", exception.getMessage());
     }
 
     @Test
@@ -39,9 +49,9 @@ class PokerHandTest {
         hands.add(highCard2);
         hands.add(highCard3);
 
-        assertEquals(HandValue.HighCard, highCard1.getHandValue());
-        assertEquals(HandValue.HighCard, highCard2.getHandValue());
-        assertEquals(HandValue.HighCard, highCard3.getHandValue());
+        assertEquals(HIGH_CARD, highCard1.getHandValue());
+        assertEquals(HIGH_CARD, highCard2.getHandValue());
+        assertEquals(HIGH_CARD, highCard3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(highCard3, hands.get(0));
@@ -59,9 +69,9 @@ class PokerHandTest {
         hands.add(pair2);
         hands.add(pair3);
 
-        assertEquals(HandValue.Pair, pair1.getHandValue());
-        assertEquals(HandValue.Pair, pair2.getHandValue());
-        assertEquals(HandValue.Pair, pair3.getHandValue());
+        assertEquals(PAIR, pair1.getHandValue());
+        assertEquals(PAIR, pair2.getHandValue());
+        assertEquals(PAIR, pair3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(pair3, hands.get(0));
@@ -79,9 +89,9 @@ class PokerHandTest {
         hands.add(twoPair2);
         hands.add(twoPair3);
 
-        assertEquals(HandValue.TwoPairs, twoPair1.getHandValue());
-        assertEquals(HandValue.TwoPairs, twoPair2.getHandValue());
-        assertEquals(HandValue.TwoPairs, twoPair3.getHandValue());
+        assertEquals(TWO_PAIRS, twoPair1.getHandValue());
+        assertEquals(TWO_PAIRS, twoPair2.getHandValue());
+        assertEquals(TWO_PAIRS, twoPair3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(twoPair1, hands.get(0));
@@ -99,9 +109,9 @@ class PokerHandTest {
         hands.add(threeOfAKind2);
         hands.add(threeOfAKind3);
 
-        assertEquals(HandValue.ThreeOfAKind, threeOfAKind1.getHandValue());
-        assertEquals(HandValue.ThreeOfAKind, threeOfAKind2.getHandValue());
-        assertEquals(HandValue.ThreeOfAKind, threeOfAKind3.getHandValue());
+        assertEquals(THREE_OF_A_KIND, threeOfAKind1.getHandValue());
+        assertEquals(THREE_OF_A_KIND, threeOfAKind2.getHandValue());
+        assertEquals(THREE_OF_A_KIND, threeOfAKind3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(threeOfAKind2, hands.get(0));
@@ -119,9 +129,9 @@ class PokerHandTest {
         hands.add(straight2);
         hands.add(straight3);
 
-        assertEquals(HandValue.Straight, straight1.getHandValue());
-        assertEquals(HandValue.Straight, straight2.getHandValue());
-        assertEquals(HandValue.Straight, straight3.getHandValue());
+        assertEquals(STRAIGHT, straight1.getHandValue());
+        assertEquals(STRAIGHT, straight2.getHandValue());
+        assertEquals(STRAIGHT, straight3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(straight2, hands.get(0));
@@ -139,9 +149,9 @@ class PokerHandTest {
         hands.add(flush2);
         hands.add(flush3);
 
-        assertEquals(HandValue.Flush, flush1.getHandValue());
-        assertEquals(HandValue.Flush, flush2.getHandValue());
-        assertEquals(HandValue.Flush, flush3.getHandValue());
+        assertEquals(FLUSH, flush1.getHandValue());
+        assertEquals(FLUSH, flush2.getHandValue());
+        assertEquals(FLUSH, flush3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(flush2, hands.get(0));
@@ -159,9 +169,9 @@ class PokerHandTest {
         hands.add(fullHouse2);
         hands.add(fullHouse3);
 
-        assertEquals(HandValue.FullHouse, fullHouse1.getHandValue());
-        assertEquals(HandValue.FullHouse, fullHouse2.getHandValue());
-        assertEquals(HandValue.FullHouse, fullHouse3.getHandValue());
+        assertEquals(FULL_HOUSE, fullHouse1.getHandValue());
+        assertEquals(FULL_HOUSE, fullHouse2.getHandValue());
+        assertEquals(FULL_HOUSE, fullHouse3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(fullHouse2, hands.get(0));
@@ -179,9 +189,9 @@ class PokerHandTest {
         hands.add(fourOfAKind2);
         hands.add(fourOfAKind3);
 
-        assertEquals(HandValue.FourOfAKind, fourOfAKind1.getHandValue());
-        assertEquals(HandValue.FourOfAKind, fourOfAKind2.getHandValue());
-        assertEquals(HandValue.FourOfAKind, fourOfAKind3.getHandValue());
+        assertEquals(FOUR_OF_A_KIND, fourOfAKind1.getHandValue());
+        assertEquals(FOUR_OF_A_KIND, fourOfAKind2.getHandValue());
+        assertEquals(FOUR_OF_A_KIND, fourOfAKind3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(fourOfAKind2, hands.get(0));
@@ -199,13 +209,20 @@ class PokerHandTest {
         hands.add(straightFlush2);
         hands.add(straightFlush3);
 
-        assertEquals(HandValue.StraightFlush, straightFlush1.getHandValue());
-        assertEquals(HandValue.StraightFlush, straightFlush2.getHandValue());
-        assertEquals(HandValue.StraightFlush, straightFlush3.getHandValue());
+        assertEquals(STRAIGHT_FLUSH, straightFlush1.getHandValue());
+        assertEquals(STRAIGHT_FLUSH, straightFlush2.getHandValue());
+        assertEquals(STRAIGHT_FLUSH, straightFlush3.getHandValue());
 
         Collections.sort(hands);
         assertEquals(straightFlush2, hands.get(0));
         assertEquals(straightFlush3, hands.get(2));
+    }
+
+    @Test
+    public void testRoyalFlush() {
+        PokerHand royalFlush = new PokerHand("QS AS JS TS KS");
+
+        assertEquals(ROYAL_FLUSH, royalFlush.getHandValue());
     }
 
     @Test
@@ -222,7 +239,6 @@ class PokerHandTest {
         Collections.sort(hands);
         assertEquals(straightFlush, hands.get(0));
     }
-
     @Test
     public void testTwoPairWin() {
         PokerHand pair = new PokerHand("9H 9C KS 3H 2D");
@@ -237,4 +253,5 @@ class PokerHandTest {
         Collections.sort(hands);
         assertEquals(twoPair, hands.get(0));
     }
+
 }

@@ -1,7 +1,4 @@
-package main;
-
-import java.util.HashMap;
-import java.util.Map;
+package poker;
 
 public enum Rank {
     A("A", 14),
@@ -34,14 +31,4 @@ public enum Rank {
         return value;
     }
 
-    private static final Map<String, Rank> map;
-    static {
-        map = new HashMap<>();
-        for (Rank r : Rank.values()) {
-            map.put(r.name, r);
-        }
-    }
-    public static Rank findByKey(String name) {
-        return map.get(name);
-    }
 }

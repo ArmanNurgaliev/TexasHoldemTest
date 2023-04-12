@@ -1,4 +1,4 @@
-package main;
+package poker;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,6 +10,8 @@ import static java.util.Comparator.comparing;
 import static java.util.Comparator.reverseOrder;
 import static java.util.stream.Collectors.counting;
 import static java.util.stream.Collectors.groupingBy;
+import static poker.HandValue.*;
+import static poker.HandValue.ROYAL_FLUSH;
 
 public class PokerHand implements Comparable<PokerHand> {
     private List<Card> cards = new ArrayList<>();
@@ -17,15 +19,20 @@ public class PokerHand implements Comparable<PokerHand> {
     private HandValue handValue;
 
     public PokerHand(String hand) {
-        String[] cards = hand.split(" ");
-        if (cards.length != 5)
+        String[] inputCards = hand.split(" ");
+        if (inputCards.length != 5)
             throw new IllegalArgumentException("Wrong input. Must be 5 cards");
-        for (String c: cards) {
+        for (String c: inputCards) {
             String[] values = c.split("");
-            Rank rank;
-            Suit suit;
+            Rank rank = null;
+            Suit suit = null;
             try {
-                rank = Rank.findByKey(values[0]);
+                for (Rank r: Rank.values()) {
+                    if (r.getName().equals(values[0]))
+                        rank = r;
+                }
+                if (rank == null)
+                    throw  new IllegalArgumentException();
                 suit = Suit.valueOf(values[1]);
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Wrong card: " + c);
@@ -57,17 +64,17 @@ public class PokerHand implements Comparable<PokerHand> {
         boolean flush = cards.stream().map(Card::getSuit).distinct().count() == 1;
 
         if (countRanks == 5 && checkStraight(ranks)) { // Straight or StraightFlush
-            handValue = flush ? HandValue.StraightFlush : HandValue.Straight;
+            handValue = flush ? ranks.get(0).equals(Rank.A) ? ROYAL_FLUSH : STRAIGHT_FLUSH : STRAIGHT;
         } else if (countRanks == 2) { // FullHouse or FourOfAKind
-            handValue = groupedCard.containsValue(3L) ? HandValue.FullHouse : HandValue.FourOfAKind;
+            handValue = groupedCard.containsValue(3L) ? FULL_HOUSE : FOUR_OF_A_KIND;
         } else if (flush){  // Flush or HighCard
-            handValue = HandValue.Flush;
+            handValue = FLUSH;
         } else if (countRanks == 3) {  // TwoPairs or ThreeOfAKind
-            handValue = groupedCard.containsValue(2L) ? HandValue.TwoPairs : HandValue.ThreeOfAKind;
+            handValue = groupedCard.containsValue(2L) ? TWO_PAIRS : THREE_OF_A_KIND;
         } else if (countRanks == 4) { // Pair
-            handValue = HandValue.Pair;
+            handValue = PAIR;
         } else { // HighCard
-            handValue = HandValue.HighCard;
+            handValue = HIGH_CARD;
         }
 
     }
@@ -86,7 +93,6 @@ public class PokerHand implements Comparable<PokerHand> {
                 .thenComparing(this::compareHighestCard)
                 .compare(this, other);
     }
-
 
     @Override
     public String toString() {

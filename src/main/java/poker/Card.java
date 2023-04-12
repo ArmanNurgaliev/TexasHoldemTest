@@ -1,4 +1,4 @@
-package main;
+package poker;
 
 public class Card implements Comparable<Card> {
     private Rank rank;
